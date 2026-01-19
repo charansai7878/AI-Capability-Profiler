@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Results - AI Capability Profiler</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <div class="logo">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                        <path d="M16 2L4 8V14C4 21.18 9.84 27.62 16 29C22.16 27.62 28 21.18 28 14V8L16 2Z"
+                            fill="url(#grad1)" />
+                        <defs>
+                            <linearGradient id="grad1" x1="4" y1="2" x2="28" y2="29">
+                                <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <span>AI Capability Profiler</span>
+                </div>
+                <a href="/" class="btn-secondary-small">← New Assessment</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Results Content -->
+    <div class="results-page">
+        <div class="container">
+            <!-- Loading State -->
+            <div id="loadingState" class="loading-container">
+                <div class="spinner"></div>
+                <p class="loading-text">Loading your results...</p>
+            </div>
+
+            <!-- Results Content -->
+            <div id="resultsContent" style="display: none;">
+                <!-- Header -->
+                <div class="results-header">
+                    <div class="results-badge" id="performanceLevel"></div>
+                    <h1 class="results-title">Your Capability Profile</h1>
+                    <p class="results-subtitle" id="jobRoleTitle"></p>
+                </div>
+
+                <!-- Overall Score -->
+                <div class="overall-score-card">
+                    <div class="score-content">
+                        <div class="score-label">Overall Capability Score</div>
+                        <div class="score-circle">
+                            <svg width="200" height="200" viewBox="0 0 200 200">
+                                <circle cx="100" cy="100" r="90" fill="none" stroke="#e5e7eb" stroke-width="12" />
+                                <circle id="scoreCircle" cx="100" cy="100" r="90" fill="none" stroke="url(#scoreGrad)"
+                                    stroke-width="12" stroke-linecap="round" stroke-dasharray="565.48"
+                                    stroke-dashoffset="565.48" transform="rotate(-90 100 100)" class="score-progress" />
+                                <text x="100" y="100" text-anchor="middle" dy="0.3em" font-size="48" font-weight="bold"
+                                    fill="#1f2937" id="scoreText">0</text>
+                                <defs>
+                                    <linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%">
+                                        <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                                        <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                        </div>
+                        <p class="score-description" id="skillReadiness"></p>
+                    </div>
+                </div>
+
+                <!-- Dimension Scores -->
+                <div class="dimensions-grid">
+                    <div class="dimension-card">
+                        <div class="dimension-header">
+                            <div class="dimension-icon">⚡</div>
+                            <h3 class="dimension-title">Technical Correctness</h3>
+                        </div>
+                        <div class="dimension-score" id="techScore">0</div>
+                        <div class="dimension-bar">
+                            <div class="dimension-progress" id="techProgress" style="width: 0%"></div>
+                        </div>
+                        <p class="dimension-feedback" id="techFeedback"></p>
+                    </div>
+
+                    <div class="dimension-card">
+                        <div class="dimension-header">
+                            <div class="dimension-icon">🧠</div>
+                            <h3 class="dimension-title">Reasoning Depth</h3>
+                        </div>
+                        <div class="dimension-score" id="reasoningScore">0</div>
+                        <div class="dimension-bar">
+                            <div class="dimension-progress" id="reasoningProgress" style="width: 0%"></div>
+                        </div>
+                        <p class="dimension-feedback" id="reasoningFeedback"></p>
+                    </div>
+
+                    <div class="dimension-card">
+                        <div class="dimension-header">
+                            <div class="dimension-icon">🎯</div>
+                            <h3 class="dimension-title">Decision Precision</h3>
+                        </div>
+                        <div class="dimension-score" id="decisionScore">0</div>
+                        <div class="dimension-bar">
+                            <div class="dimension-progress" id="decisionProgress" style="width: 0%"></div>
+                        </div>
+                        <p class="dimension-feedback" id="decisionFeedback"></p>
+                    </div>
+
+                    <div class="dimension-card">
+                        <div class="dimension-header">
+                            <div class="dimension-icon">💬</div>
+                            <h3 class="dimension-title">Communication Clarity</h3>
+                        </div>
+                        <div class="dimension-score" id="commScore">0</div>
+                        <div class="dimension-bar">
+                            <div class="dimension-progress" id="commProgress" style="width: 0%"></div>
+                        </div>
+                        <p class="dimension-feedback" id="commFeedback"></p>
+                    </div>
+                </div>
+
+                <!-- Strengths & Weaknesses -->
+                <div class="analysis-grid">
+                    <div class="analysis-card strengths-card">
+                        <div class="analysis-header">
+                            <div class="analysis-icon">✓</div>
+                            <h2 class="analysis-title">Core Strengths</h2>
+                        </div>
+                        <ul class="analysis-list" id="strengthsList"></ul>
+                    </div>
+
+                    <div class="analysis-card weaknesses-card">
+                        <div class="analysis-header">
+                            <div class="analysis-icon">!</div>
+                            <h2 class="analysis-title">Areas for Growth</h2>
+                        </div>
+                        <ul class="analysis-list" id="weaknessesList"></ul>
+                    </div>
+                </div>
+
+                <!-- Recommendations -->
+                <div class="recommendations-card">
+                    <h2 class="recommendations-title">📋 Personalized Recommendations</h2>
+                    <div class="recommendations-list" id="recommendationsList"></div>
+                </div>
+
+                <!-- Model Answer -->
+                <div class="card" id="modelAnswerCard"
+                    style="display: none; margin-top: 30px; border: 1px solid #e5e7eb; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+                    <div class="card-header"
+                        style="background: #f0f9ff; padding: 16px 24px; border-bottom: 1px solid #e5e7eb;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="font-size: 24px;">🏆</div>
+                            <h2 style="font-size: 20px; font-weight: 700; color: #0284c7; margin: 0;">Model Answer</h2>
+                        </div>
+                        <div
+                            style="background: #ffffff; color: #0284c7; padding: 4px 12px; border-radius: 9999px; font-size: 12px; font-weight: 600; text-transform: uppercase;">
+                            Ideal Response</div>
+                    </div>
+                    <div style="padding: 24px;">
+                        <p id="modelAnswerText"
+                            style="line-height: 1.7; color: #374151; font-style: italic; font-size: 16px;"></p>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="results-actions">
+                    <button class="btn-primary btn-large" onclick="window.print()">
+                        <span>Download Report</span>
+                    </button>
+                    <button class="btn-secondary btn-large" onclick="window.location.href='/'">
+                        <span>Take Another Assessment</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function loadResults() {
+            try {
+                const response = await fetch('/api/get-results');
+
+                if (!response.ok) {
+                    throw new Error('No results found');
+                }
+
+                const data = await response.json();
+
+                if (data.success && data.evaluation) {
+                    displayResults(data.evaluation, data.job_role);
+                } else {
+                    throw new Error('No evaluation data');
+                }
+            } catch (error) {
+                console.error('Error loading results:', error);
+                alert('No results found. Please complete an assessment first.');
+                window.location.href = '/';
+            }
+        }
+
+        function displayResults(evaluation, jobRole) {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('resultsContent').style.display = 'block';
+
+            // Header
+            document.getElementById('performanceLevel').textContent = evaluation.performance_level + ' Level';
+            document.getElementById('jobRoleTitle').textContent = 'Assessment for: ' + jobRole;
+
+            // Overall Score
+            const overallScore = evaluation.overall_score;
+            document.getElementById('scoreText').textContent = overallScore;
+            document.getElementById('skillReadiness').textContent = evaluation.skill_readiness;
+
+            // Animate score circle
+            const circle = document.getElementById('scoreCircle');
+            const circumference = 2 * Math.PI * 90;
+            const offset = circumference - (overallScore / 100) * circumference;
+
+            setTimeout(() => {
+                circle.style.strokeDashoffset = offset;
+            }, 500);
+
+            // Dimensions
+            const dimensionsGrid = document.querySelector('.dimensions-grid');
+            dimensionsGrid.innerHTML = ''; // Clear existing
+
+            const dims = evaluation.dimensions;
+            Object.entries(dims).forEach(([key, val]) => {
+                const formattedKey = key.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+
+                const card = document.createElement('div');
+                card.className = 'dimension-card';
+                card.innerHTML = `
+                    <div class="dimension-header">
+                        <div class="dimension-icon">📊</div>
+                        <h3 class="dimension-title">${formattedKey}</h3>
+                    </div>
+                    <div class="dimension-score">${val.score}</div>
+                    <div class="dimension-bar">
+                        <div class="dimension-progress" style="width: 0%"></div>
+                    </div>
+                    <p class="dimension-feedback">${val.feedback}</p>
+                `;
+                dimensionsGrid.appendChild(card);
+
+                // Animate
+                setTimeout(() => {
+                    card.querySelector('.dimension-progress').style.width = val.score + '%';
+                }, 300);
+            });
+
+            // Strengths
+            const strengthsList = document.getElementById('strengthsList');
+            strengthsList.innerHTML = '';
+            evaluation.strengths.forEach(strength => {
+                const li = document.createElement('li');
+                li.textContent = strength;
+                strengthsList.appendChild(li);
+            });
+
+            // Weaknesses
+            const weaknessesList = document.getElementById('weaknessesList');
+            weaknessesList.innerHTML = '';
+            evaluation.weaknesses.forEach(weakness => {
+                const li = document.createElement('li');
+                li.textContent = weakness;
+                weaknessesList.appendChild(li);
+            });
+
+            // Recommendations
+            const recommendationsList = document.getElementById('recommendationsList');
+            recommendationsList.innerHTML = '';
+            evaluation.recommendations.forEach((rec, index) => {
+                const div = document.createElement('div');
+                div.className = 'recommendation-item';
+                div.innerHTML = `<strong>${index + 1}.</strong> ${rec}`;
+                recommendationsList.appendChild(div);
+            });
+
+            // Model Answer
+            if (evaluation.ideal_answer) {
+                document.getElementById('modelAnswerCard').style.display = 'block';
+                document.getElementById('modelAnswerText').textContent = evaluation.ideal_answer;
+            } else {
+                document.getElementById('modelAnswerCard').style.display = 'none';
+            }
+        }
+
+
+
+        // Load results on page load
+        document.addEventListener('DOMContentLoaded', loadResults);
+    </script>
+</body>
+
+</html>

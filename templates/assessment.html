@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assessment - AI Capability Profiler</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <div class="logo">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                        <path d="M16 2L4 8V14C4 21.18 9.84 27.62 16 29C22.16 27.62 28 21.18 28 14V8L16 2Z" fill="url(#grad1)"/>
+                        <defs>
+                            <linearGradient id="grad1" x1="4" y1="2" x2="28" y2="29">
+                                <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <span>AI Capability Profiler</span>
+                </div>
+                <a href="/" class="btn-secondary-small">← Back to Home</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Assessment Content -->
+    <div class="assessment-page">
+        <div class="container">
+            <!-- Loading State -->
+            <div id="loadingState" class="loading-container">
+                <div class="spinner"></div>
+                <p class="loading-text">Loading your scenario...</p>
+            </div>
+
+            <!-- Scenario Content -->
+            <div id="scenarioContent" style="display: none;">
+                <div class="progress-bar">
+                    <div class="progress-step active">
+                        <div class="step-circle">1</div>
+                        <span>Scenario</span>
+                    </div>
+                    <div class="progress-line"></div>
+                    <div class="progress-step">
+                        <div class="step-circle">2</div>
+                        <span>Response</span>
+                    </div>
+                    <div class="progress-line"></div>
+                    <div class="progress-step">
+                        <div class="step-circle">3</div>
+                        <span>Results</span>
+                    </div>
+                </div>
+
+                <div class="scenario-card">
+                    <div class="scenario-header">
+                        <div class="scenario-badge" id="jobRoleBadge"></div>
+                        <h1 class="scenario-title" id="scenarioTitle">Your Challenge</h1>
+                    </div>
+
+                    <div class="scenario-meta">
+                        <div class="meta-item">
+                            <span class="meta-label">Complexity:</span>
+                            <span class="meta-value" id="complexityLevel"></span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">Estimated Time:</span>
+                            <span class="meta-value">20-30 minutes</span>
+                        </div>
+                    </div>
+
+                    <div class="scenario-description" id="scenarioDescription"></div>
+
+                    <div class="key-challenges">
+                        <h3>Key Challenges to Consider:</h3>
+                        <ul id="challengesList"></ul>
+                    </div>
+                </div>
+
+                <div class="response-card">
+                    <h2 class="response-title">Your Response</h2>
+                    <p class="response-instructions">
+                        Provide a comprehensive solution that demonstrates your problem-solving approach, technical knowledge, and decision-making process. Consider multiple perspectives, potential consequences, and practical implementation.
+                    </p>
+                    
+                    <div class="form-group">
+                        <textarea 
+                            id="userResponse" 
+                            class="response-textarea" 
+                            placeholder="Start writing your detailed response here...
+
+Consider including:
+• Your initial assessment of the situation
+• Key stakeholders and their concerns
+• Immediate actions you would take
+• Short-term and long-term solutions
+• Potential risks and mitigation strategies
+• Success metrics and evaluation criteria"
+                            rows="20"
+                        ></textarea>
+                        <div class="char-counter">
+                            <span id="charCount">0</span> characters
+                            <span class="char-hint">(Minimum 200 characters recommended)</span>
+                        </div>
+                    </div>
+
+                    <div class="response-tips">
+                        <h4>💡 Tips for a Strong Response:</h4>
+                        <ul>
+                            <li>Be specific and detailed in your explanations</li>
+                            <li>Consider multiple stakeholder perspectives</li>
+                            <li>Address both immediate and long-term implications</li>
+                            <li>Explain your reasoning and decision-making process</li>
+                            <li>Acknowledge trade-offs and potential challenges</li>
+                        </ul>
+                    </div>
+
+                    <div class="button-group">
+                        <button class="btn-primary btn-large" onclick="submitResponse()" id="submitBtn">
+                            <span>Submit for Evaluation</span>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                        <button class="btn-secondary" onclick="if(confirm('Are you sure you want to start over?')) window.location.href='/'">
+                            Start Over
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let scenarioData = null;
+
+        // Load scenario data
+        async function loadScenario() {
+            try {
+                const response = await fetch('/api/get-scenario');
+                const data = await response.json();
+                
+                if (data.success && data.scenario) {
+                    scenarioData = data.scenario;
+                    displayScenario(data.scenario, data.job_role);
+                } else {
+                    // If no scenario found, redirect back with error message
+                    alert('No scenario found. Please start from the beginning.');
+                    window.location.href = '/';
+                }
+            } catch (error) {
+                console.error('Error loading scenario:', error);
+                document.getElementById('loadingState').innerHTML = 
+                    '<p class="error-text">Error loading scenario. <a href="/">Return home</a></p>';
+            }
+        }
+
+        function displayScenario(scenario, jobRole) {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('scenarioContent').style.display = 'block';
+
+            document.getElementById('jobRoleBadge').textContent = jobRole || 'Professional Role';
+            document.getElementById('scenarioTitle').textContent = scenario.scenario_title;
+            document.getElementById('complexityLevel').textContent = scenario.complexity_level;
+            document.getElementById('scenarioDescription').textContent = scenario.scenario_description;
+
+            const challengesList = document.getElementById('challengesList');
+            challengesList.innerHTML = '';
+            scenario.key_challenges.forEach(challenge => {
+                const li = document.createElement('li');
+                li.textContent = challenge;
+                challengesList.appendChild(li);
+            });
+        }
+
+        // Character counter
+        document.addEventListener('DOMContentLoaded', function() {
+            const textarea = document.getElementById('userResponse');
+            const charCount = document.getElementById('charCount');
+
+            if (textarea) {
+                textarea.addEventListener('input', function() {
+                    charCount.textContent = this.value.length;
+                });
+            }
+
+            loadScenario();
+        });
+
+        async function submitResponse() {
+            const response = document.getElementById('userResponse').value.trim();
+
+            if (response.length < 50) {
+                alert('Please provide a more detailed response (at least 50 characters).');
+                return;
+            }
+
+            const btn = document.getElementById('submitBtn');
+            const originalContent = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<span>Evaluating Your Response...</span>';
+
+            // Show progress
+            const steps = document.querySelectorAll('.progress-step');
+            steps[1].classList.add('active');
+
+            try {
+                const apiResponse = await fetch('/api/evaluate-response', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ response: response })
+                });
+
+                const data = await apiResponse.json();
+
+                if (data.success) {
+                    steps[2].classList.add('active');
+                    setTimeout(() => {
+                        window.location.href = '/results';
+                    }, 500);
+                } else {
+                    alert('Error: ' + (data.error || 'Failed to evaluate response'));
+                    btn.disabled = false;
+                    btn.innerHTML = originalContent;
+                    steps[1].classList.remove('active');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+                btn.disabled = false;
+                btn.innerHTML = originalContent;
+                steps[1].classList.remove('active');
+            }
+        }
+    </script>
+</body>
+</html>

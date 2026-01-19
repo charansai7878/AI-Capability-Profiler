@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Capability Profiler - Beyond the Resume</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-content">
+                    <div class="logo">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                            <path d="M16 2L4 8V14C4 21.18 9.84 27.62 16 29C22.16 27.62 28 21.18 28 14V8L16 2Z"
+                                fill="url(#grad1)" />
+                            <defs>
+                                <linearGradient id="grad1" x1="4" y1="2" x2="28" y2="29">
+                                    <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                        <span>AI Capability Profiler</span>
+                    </div>
+                    <div class="nav-links">
+                        <a href="#how-it-works">How It Works</a>
+                        <a href="#features">Features</a>
+                        <a href="#about">About</a>
+                        {% if user %}
+                        <a href="{{ url_for('dashboard') }}" class="nav-item">Dashboard</a>
+                        <a href="{{ url_for('logout') }}" style="color: var(--danger-color);">Logout</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container hero-content">
+            <div class="hero-text">
+                <div class="hero-badge">
+                    <span class="badge-dot"></span>
+                    AI-Powered Skills Assessment
+                </div>
+                <h1 class="hero-title">
+                    Beyond the Resume:<br />
+                    <span class="gradient-text">Prove Your True Capabilities</span>
+                </h1>
+                <p class="hero-description">
+                    Stop listing skills. Start demonstrating them. Our AI-powered platform evaluates your real-world
+                    problem-solving ability through realistic scenario-based assessments.
+                </p>
+                <div class="cta-section">
+                    <button class="btn-primary" onclick="scrollToAssessment()">
+                        <span>Start Assessment</span>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </button>
+                    <button class="btn-secondary" onclick="scrollToFeatures()">
+                        <span>Learn More</span>
+                    </button>
+                </div>
+                <div class="stats-row">
+                    <div class="stat-item">
+                        <div class="stat-number">10k+</div>
+                        <div class="stat-label">Assessments Completed</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">95%</div>
+                        <div class="stat-label">Accuracy Rate</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">50+</div>
+                        <div class="stat-label">Job Domains</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="floating-card card-1">
+                    <div class="card-icon">🎯</div>
+                    <div class="card-text">
+                        <div class="card-title">Decision Quality</div>
+                        <div class="card-score">92/100</div>
+                    </div>
+                </div>
+                <div class="floating-card card-2">
+                    <div class="card-icon">🧠</div>
+                    <div class="card-text">
+                        <div class="card-title">Reasoning Depth</div>
+                        <div class="card-score">88/100</div>
+                    </div>
+                </div>
+                <div class="floating-card card-3">
+                    <div class="card-icon">⚡</div>
+                    <div class="card-text">
+                        <div class="card-title">Technical Accuracy</div>
+                        <div class="card-score">95/100</div>
+                    </div>
+                </div>
+                <div class="hero-illustration">
+                    <svg viewBox="0 0 400 400" fill="none">
+                        <circle cx="200" cy="200" r="150" fill="url(#grad2)" opacity="0.1" />
+                        <circle cx="200" cy="200" r="100" fill="url(#grad2)" opacity="0.2" />
+                        <circle cx="200" cy="200" r="50" fill="url(#grad2)" opacity="0.3" />
+                        <defs>
+                            <linearGradient id="grad2" x1="50" y1="50" x2="350" y2="350">
+                                <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">How It Works</h2>
+                <p class="section-subtitle">Four simple steps to discover your true professional capabilities</p>
+            </div>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">01</div>
+                    <div class="step-icon">💼</div>
+                    <h3 class="step-title">Enter Job Role</h3>
+                    <p class="step-description">Tell us the position you're interested in. Our AI understands hundreds
+                        of professional roles across industries.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">02</div>
+                    <div class="step-icon">📝</div>
+                    <h3 class="step-title">Face Real Scenarios</h3>
+                    <p class="step-description">Receive a dynamically generated scenario that simulates actual workplace
+                        challenges with no single correct answer.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">03</div>
+                    <div class="step-icon">✍️</div>
+                    <h3 class="step-title">Provide Your Solution</h3>
+                    <p class="step-description">Write a detailed response explaining your analysis, approach, and
+                        decision-making process.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">04</div>
+                    <div class="step-icon">📊</div>
+                    <h3 class="step-title">Get Detailed Insights</h3>
+                    <p class="step-description">Receive a comprehensive capability profile with scores, strengths,
+                        weaknesses, and personalized recommendations.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="section features-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Why Choose AI Capability Profiler</h2>
+                <p class="section-subtitle">Advanced assessment technology that goes beyond traditional hiring methods
+                </p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3 class="feature-title">Scenario-Based Evaluation</h3>
+                    <p class="feature-description">Realistic, ambiguous scenarios that mirror actual workplace
+                        challenges and reveal true problem-solving abilities.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3 class="feature-title">AI-Powered Analysis</h3>
+                    <p class="feature-description">Advanced LLM evaluation across multiple dimensions: technical
+                        correctness, reasoning depth, and decision quality.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h3 class="feature-title">Comprehensive Profiling</h3>
+                    <p class="feature-description">Detailed capability reports highlighting strengths, weaknesses, and
+                        specific areas for professional growth.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚖️</div>
+                    <h3 class="feature-title">Bias-Free Assessment</h3>
+                    <p class="feature-description">Focus on what you can do, not where you studied or worked.
+                        Merit-based evaluation for everyone.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🚀</div>
+                    <h3 class="feature-title">Instant Results</h3>
+                    <p class="feature-description">Get your detailed capability profile immediately after completing the
+                        assessment. No waiting period.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3 class="feature-title">Privacy First</h3>
+                    <p class="feature-description">Your responses and results are confidential. Share only what you
+                        want, when you want.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Assessment Section -->
+    <section id="assessment" class="section assessment-section">
+        <div class="container">
+            <div class="assessment-card">
+                <div class="assessment-header">
+                    <h2 class="assessment-title">Start Your Assessment</h2>
+                    <p class="assessment-subtitle">Enter your target job role to begin the capability evaluation</p>
+                </div>
+                <div class="assessment-form">
+                    <div class="form-group">
+                        <label for="jobRole" class="form-label">
+                            <span>Job Role or Position</span>
+                            <span class="label-hint">e.g., Data Scientist, Product Manager, DevOps Engineer</span>
+                        </label>
+                        <input type="text" id="jobRole" class="form-input"
+                            placeholder="Enter the job role you want to assess for..." autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="complexity" class="form-label">
+                            <span>Complexity Level</span>
+                            <span class="label-hint">Select the cognitive difficulty</span>
+                        </label>
+                        <select id="complexity" class="form-input">
+                            <option value="Low">Low - Foundational Knowledge</option>
+                            <option value="Medium" selected>Medium - Applied Thinking</option>
+                            <option value="High">High - Strategic & Executive Thinking</option>
+                        </select>
+                    </div>
+                    <div class="popular-roles">
+                        <span class="popular-label">Popular roles:</span>
+                        <div class="role-tags">
+                            <span class="role-tag" onclick="selectRole('Data Scientist')">Data Scientist</span>
+                            <span class="role-tag" onclick="selectRole('Product Manager')">Product Manager</span>
+                            <span class="role-tag" onclick="selectRole('Software Engineer')">Software Engineer</span>
+                            <span class="role-tag" onclick="selectRole('DevOps Engineer')">DevOps Engineer</span>
+                            <span class="role-tag" onclick="selectRole('Business Analyst')">Business Analyst</span>
+                            <span class="role-tag" onclick="selectRole('UX Designer')">UX Designer</span>
+                        </div>
+                    </div>
+                    <button class="btn-primary btn-large" onclick="startAssessment()" id="startBtn">
+                        <span>Generate Scenario</span>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                            <path d="M16 2L4 8V14C4 21.18 9.84 27.62 16 29C22.16 27.62 28 21.18 28 14V8L16 2Z"
+                                fill="url(#grad3)" />
+                            <defs>
+                                <linearGradient id="grad3" x1="4" y1="2" x2="28" y2="29">
+                                    <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                        <span>AI Capability Profiler</span>
+                    </div>
+                    <p class="footer-tagline">Redefining talent assessment through AI-powered scenario evaluation.</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Product</h4>
+                        <a href="#how-it-works">How It Works</a>
+                        <a href="#features">Features</a>
+                        <a href="#assessment">Start Assessment</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Company</h4>
+                        <a href="#about">About Us</a>
+                        <a href="#">Careers</a>
+                        <a href="#">Contact</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Legal</h4>
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                        <a href="#">Cookie Policy</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 AI Capability Profiler. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function scrollToAssessment() {
+            document.getElementById('assessment').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function scrollToFeatures() {
+            document.getElementById('features').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function selectRole(role) {
+            document.getElementById('jobRole').value = role;
+        }
+
+        async function startAssessment() {
+            const jobRole = document.getElementById('jobRole').value.trim();
+
+            if (!jobRole) {
+                alert('Please enter a job role to continue.');
+                return;
+            }
+
+            const btn = document.getElementById('startBtn');
+            const originalContent = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<span>Generating Scenario...</span>';
+
+            try {
+                const complexity = document.getElementById('complexity').value;
+
+                const response = await fetch('/api/generate-scenario', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        job_role: jobRole,
+                        complexity: complexity
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    window.location.href = '/assessment';
+                } else {
+                    alert('Error: ' + (data.error || 'Failed to generate scenario'));
+                    btn.disabled = false;
+                    btn.innerHTML = originalContent;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+                btn.disabled = false;
+                btn.innerHTML = originalContent;
+            }
+        }
+
+        // Enter key support
+        document.getElementById('jobRole').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                startAssessment();
+            }
+        });
+    </script>
+</body>
+
+</html>
